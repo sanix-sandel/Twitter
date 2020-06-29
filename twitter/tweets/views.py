@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.utils.http import is_safe_url
 from .forms import TweetForm
 from .models import Tweet
+from django.contrib.auth.decorators import login_required
+
 
 def home(request):
     qs=Tweet.objects.all()
@@ -14,11 +16,13 @@ def home(request):
     }
     return render(request, 'pages/home.html', (data))
 
+@login_required
 def tweet_create_view(request, *args, **kwargs):
     form=TweetForm(request.POST or None)
     next_url=request.POST.get('next') or None
     if form.is_valid():
         obj=form.save(commit=False)
+        obj.user=request.user
         obj.save()
         if request.is_ajax():
             return JsonResponse(obj.serialize(), status=201) #201==created items

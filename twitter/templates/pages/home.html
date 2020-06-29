@@ -52,6 +52,8 @@ function handleTweetCreateFormDidSumbit(event) {
     const url = myForm.getAttribute("action")
     const method = myForm.getAttribute("method")
     const xhr = new XMLHttpRequest()
+    const responseType = "json"
+    xhr.responseType = responseType
     xhr.open(method, url)
     xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")//Django Ajax
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")//Django Ajax
