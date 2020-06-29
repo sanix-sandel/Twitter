@@ -39,24 +39,19 @@ def tweet_create_view(request, *args, **kwargs):
     return Response({}, status=400)    
 
 
-@login_required
-def tweet_create(request, *args, **kwargs):
-    form=TweetForm(request.POST or None)
-    next_url=request.POST.get('next') or None
-    if form.is_valid():
-        obj=form.save(commit=False)
-        obj.user=request.user
-        obj.save()
-        if request.is_ajax():
-            return JsonResponse(obj.serialize(), status=201) #201==created items
-        if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
-            return redirect(next_url)
-                
-        form=TweetForm()
-    if form.errors:
-        if request.is_ajax():#make sure it's ajax request
-            return JsonResponse(form.errors, status=400)    
-    return render(request, 'components/form.html', {'form':form})    
+@api_view(['DELETE', 'POST'])
+@permission_classes([IsAuthenticated])
+def tweet_delete_view(request, tweet_id, *args, **kwargs):
+    qs=Tweet.objectsfilter(id=tweet_id)
+    if not qs.exists():
+        return Response({}, status=404)
+    qs=qs.filter(user=request.user)
+    if not qs.exists():
+        return Response({"message":"You cannot delete this tweet"}, status=404)
+    obj=qs.first()
+    obj.delete()
+    serializer=TweetSerializer(obj)
+    return Response({"message":"tweet removed"}, status=200)        
 
 @api_view(['GET'])
 def tweets_list(request):

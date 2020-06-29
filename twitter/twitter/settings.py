@@ -54,6 +54,24 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'twitter.urls'
 
+
+DEFAULT_RENDER_CLASSES=[
+    'rest_framework.renderers.JSONRender',
+]
+
+if DEBUG:
+    DEFAULT_RENDER_CLASSES
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
+
+
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
