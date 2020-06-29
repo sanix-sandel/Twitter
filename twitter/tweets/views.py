@@ -14,6 +14,7 @@ def tweets_list(request):
     qs=Tweet.objects.all()
     tweets=[{"id":x.id, 'content':x.content} for x in qs]
     data={
+        'isUser':False,
         'response':tweets
     }
     return JsonResponse(data)

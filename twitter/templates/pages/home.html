@@ -21,8 +21,10 @@
         xhr.responseType=responseType
         xhr.open(method, url)
         xhr.onload=function(){
-            console.log(xhr.response)
             
+            const response=xhr.response
+            var listedItems=response.response
+            console.log(listedItems)
         }
         xhr.send()
         
