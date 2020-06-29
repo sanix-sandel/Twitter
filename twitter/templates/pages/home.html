@@ -1,0 +1,32 @@
+{% include 'base.html' %}
+{% block title %}
+    Salut
+{% endblock title %}
+{% block content %}
+    <h1>Hello, world!</h1>
+    <div id="tweets">
+        Replace
+    </div>
+    
+    <script>
+        const tweetsElement=document.getElementById("tweets")
+        tweetsElement.innerHTML='Loading...'
+
+        console.log('salut')
+        const xhr =new XMLHttpRequest()
+        const method='GET'//POST
+        const url='/tweets'
+        const responseType='json'
+    
+        xhr.responseType=responseType
+        xhr.open(method, url)
+        xhr.onload=function(){
+            console.log(xhr.response)
+            
+        }
+        xhr.send()
+        
+        
+    </script>
+    
+{% endblock %}
