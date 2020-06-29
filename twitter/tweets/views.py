@@ -6,7 +6,8 @@ from django.utils.http import is_safe_url
 from .forms import TweetForm
 from .models import Tweet
 from django.contrib.auth.decorators import login_required
-
+from .serializers import TweetSerializer
+from rest_framework.response import Response
 
 def home(request):
     qs=Tweet.objects.all()
@@ -16,8 +17,19 @@ def home(request):
     }
     return render(request, 'pages/home.html', (data))
 
-@login_required
+
 def tweet_create_view(request, *args, **kwargs):
+    
+    serializer=TweetSerializer(data=request.POST or None)
+    if serializer.is_valid():
+        
+        serializer.save(user=request.user)
+        return JsonResponse(serializer.data, status=201)
+    return JsonResponse({}, status=400)    
+
+
+@login_required
+def tweet_create(request, *args, **kwargs):
     form=TweetForm(request.POST or None)
     next_url=request.POST.get('next') or None
     if form.is_valid():
