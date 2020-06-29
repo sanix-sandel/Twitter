@@ -8,6 +8,10 @@ from .models import Tweet
 from django.contrib.auth.decorators import login_required
 from .serializers import TweetSerializer
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+
 
 def home(request):
     qs=Tweet.objects.all()
@@ -18,14 +22,15 @@ def home(request):
     return render(request, 'pages/home.html', (data))
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def tweet_create_view(request, *args, **kwargs):
     
-    serializer=TweetSerializer(data=request.POST or None)
-    if serializer.is_valid():
-        
+    serializer=TweetSerializer(data=request.POST)
+    if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
-        return JsonResponse(serializer.data, status=201)
-    return JsonResponse({}, status=400)    
+        return Response(serializer.data, status=201)
+    return Response({}, status=400)    
 
 
 @login_required
@@ -47,26 +52,17 @@ def tweet_create(request, *args, **kwargs):
             return JsonResponse(form.errors, status=400)    
     return render(request, 'components/form.html', {'form':form})    
 
+@api_view(['GET'])
 def tweets_list(request):
     qs=Tweet.objects.all()
-    tweets=[x.serialize() for x in qs]
-    data={
-        'isUser':False,
-        'response':tweets
-    }
-    return JsonResponse(data)
+    serializer=TweetSerializer(qs, many=True)
+    return Response(serializer.data, status=200)
 
-# Create your views here.
+@api_view(['GET'])
 def tweet_detail(request, tweet_id, *args, **kwargs):
-    data={
-        'id':tweet_id,
-    }
-    status=200
-    try:
-        obj=Tweet.objects.get(id=tweet_id)
-        data['content']=obj.content
-    except:
-        data['message']='Not found'
-        status=404
-    
-    return JsonResponse(data, status=status)#json.dumps content_type='application/json'
+    qs=Tweet.objects.filter(id=tweet_id)
+    if not qs.exists():
+        return Response({}, status=404)
+    obj=qs.first()
+    serializer=TweetSerializer(obj)    
+    return Response(serializer.data, status=200)   
