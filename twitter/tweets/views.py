@@ -1,6 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from .models import Tweet
+from .forms import TweetForm
 
 def home(request):
     qs=Tweet.objects.all()
@@ -9,6 +10,14 @@ def home(request):
         'response':tweets
     }
     return render(request, 'pages/home.html', (data))
+
+def tweet_create_view(request, *args, **kwargs):
+    form=TweetForm(request.POST or None)
+    if form.is_valid():
+        obj=form.save(commit=False)
+        obj.save()
+        form=TweetForm()
+    return render(request, 'components/form.html', {'form':form})    
 
 def tweets_list(request):
     qs=Tweet.objects.all()
