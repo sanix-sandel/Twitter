@@ -44,7 +44,7 @@ function handleTweetCreateFormDidSumbit(event) {
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")//Django Ajax
     xhr.onload = function() {
         const serverResponse = xhr.response
-        console.log(xhr.status, serverResponse)
+       // console.log(xhr.status, serverResponse)
         const tweetsEl = document.getElementById("tweets")
         loadTweets(tweetsEl) 
     }

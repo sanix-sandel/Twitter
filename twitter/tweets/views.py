@@ -1,7 +1,10 @@
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
-from .models import Tweet
+import random
+from django.conf import settings
+from django.http import HttpResponse, Http404, JsonResponse
+from django.shortcuts import render, redirect
+from django.utils.http import is_safe_url
 from .forms import TweetForm
+from .models import Tweet
 
 def home(request):
     qs=Tweet.objects.all()
