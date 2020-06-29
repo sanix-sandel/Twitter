@@ -5,7 +5,7 @@ from .forms import TweetForm
 
 def home(request):
     qs=Tweet.objects.all()
-    tweets=[{"id":x.id, 'content':x.content} for x in qs]
+    tweets=[x.serialize() for x in qs]
     data={
         'response':tweets
     }
@@ -27,7 +27,7 @@ def tweet_create_view(request, *args, **kwargs):
 
 def tweets_list(request):
     qs=Tweet.objects.all()
-    tweets=[{"id":x.id, 'content':x.content} for x in qs]
+    tweets=[x.serialize() for x in qs]
     data={
         'isUser':False,
         'response':tweets

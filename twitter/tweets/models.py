@@ -9,5 +9,5 @@ class Tweet(models.Model):
         return {
             'id':self.id,
             'content':self.content,
-            'like':random.randint(0, 180)
+            'likes':random.randint(0, 180)
         }
