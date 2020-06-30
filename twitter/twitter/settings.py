@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+TWEET_ACTION_OPTIONS = ["like", "unlike", "retweet"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -60,7 +60,10 @@ DEFAULT_RENDER_CLASSES=[
 ]
 
 if DEBUG:
-    DEFAULT_RENDER_CLASSES
+    DEFAULT_RENDER_CLASSES+=[
+        'rest_framework.renderers.BrowsableAPIRender',
+    ]
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
