@@ -38,11 +38,13 @@ def home(request):
 #@authentication_classes([Sessionauthentication])
 @permission_classes([IsAuthenticated])
 def tweet_create(request, *args, **kwargs):
-    print('life')
+    
     serializer=TweetSerializer(data=request.POST)
+    print("the data {}".format(request.POST))
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
-        print('life is')
+     #   print('life is')
+        print(serializer.data)
         return Response(serializer.data, status=201)
     return Response({}, status=400)    
 

@@ -75,7 +75,7 @@ function handleTweetCreateFormDidSumbit(event) {
     xhr.onload = function() {
         if (xhr.status === 201) {
             const serverResponse = xhr.response
-       // console.log(xhr.status, serverResponse)
+            console.log(serverResponse)
             const tweetsEl = document.getElementById("tweets")
             loadTweets(tweetsEl) 
             myForm.reset()
@@ -102,8 +102,6 @@ function handleTweetCreateFormDidSumbit(event) {
         alert("An error occurred. Please try again later.")
     }
     xhr.send(myFormData)
-
-
 }
 const tweetCreateFormEl = document.getElementById("tweet-create-form")
 tweetCreateFormEl.addEventListener("submit", handleTweetCreateFormDidSumbit)
