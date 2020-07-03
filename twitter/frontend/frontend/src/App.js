@@ -12,7 +12,7 @@ function loadTweets(callback){
     callback(xhr.response, xhr.status)
   }
   xhr.onerror=function(e){
-    console.log(e)
+   // console.log(e)
     callback({"message":"The request was an error"}, 400)
   }
   xhr.send()
@@ -22,7 +22,7 @@ function loadTweets(callback){
 function Tweet(props){
   const {tweet}=props
   const className=props.className ? props.className:'col-10 mx-auto col-md-6'
-  return <div>
+  return <div className={className}>
     <p>{tweet.id}-{tweet.content}</p>
   </div>
 }
